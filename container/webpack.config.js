@@ -50,9 +50,7 @@ module.exports = {
         child3: "child3@http://localhost:3003/remoteEntry.js"
       },
       exposes: {
-        "./HomeContent": "./src/HomeContent.jsx",
         "./MainLayout": "./src/MainLayout.jsx",
-        "./connectToChild": "./src/connectToChild.js",
       },
       shared: {
         ...deps,

@@ -4,15 +4,15 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import "remixicon/fonts/remixicon.css";
 import "./index.scss";
+import NotDeployed from './NotDeployed';
 
-import HomeContent from "container/HomeContent";
-import Child1Content from "child1/Child1Content";
-import Child2Content from "child2/Child2Content";
-import Feature2_M1 from "child1/Feature2_M1";
-import SafeComponent from './SafeComponent';
-import Test3 from './Test3';
-// import TrySome from "child3";
-import axios from 'axios';
+let Child1Content ;
+let Child2Content ;
+let Child3Content ;
+try { Child1Content = require('child1/Child1Content').default } catch (e) {Child1Content = NotDeployed}
+try { Child2Content = require('child2/Child2Content').default } catch (e) {Child2Content = NotDeployed}
+try { Child3Content = require('child3/Child3Content').default } catch (e) {Child3Content = NotDeployed}
+
 
 
 export default function MainLayout() {
@@ -73,14 +73,10 @@ export default function MainLayout() {
   <div className="text-3xl mx-auto max-w-6xl">
      <div className="my-10">
           {modules && modules[0] ? <Switch>
-            <Route exact path="/" component={HomeContent} />
-            {<Route exact path="/module1/feature-1" component={Feature2_M1} />}
-            <Route exact path="/module1/feature-2" component={Feature2_M1} />
-            <Route exact path="/module1/feature-3" component={Feature2_M1} />
-            <Route exact path="/module1/feature-4" component={Feature2_M1} />
+            <Route exact path="/" component={()=><div>Welcome</div>} />
             <Route exact path="/module1" component={()=><Child1Content path='/module1' modules={modules} modulePerms={modulePerms} />} />
             <Route exact path="/module2" component={()=><Child2Content path='/module2' modules={modules} modulePerms={modulePerms} />} />
-
+            <Route exact path="/module3" component={()=><Child3Content path='/module3' modules={modules} modulePerms={modulePerms} />} />
           </Switch>
         :
         <p><h1>Please Log In First</h1></p>  
