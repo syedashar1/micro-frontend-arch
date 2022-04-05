@@ -45,7 +45,6 @@ module.exports = {
       filename: "remoteEntry.js",
       remotes: {
         child2: "child2@http://localhost:3001/remoteEntry.js",
-        child1: "child1@http://localhost:3002/remoteEntry.js",
       },
       exposes: {
         "./Child2Content": "./src/Child2Content.jsx",

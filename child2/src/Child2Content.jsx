@@ -5,10 +5,28 @@ import Feature2_M2 from "./Feature2_M2";
 import Feature3_M2 from "./Feature3_M2";
 import Feature4_M2 from "./Feature4_M2";
 import IndexPage from "./IndexPage";
+import { Observable } from 'windowed-observable';
+const observable = new Observable('messages');
 
-export default function Child2Content({path,modules,modulePerms}) {
+export default function Child2Content({ }) {
 
-
+  const [modules, setmodules] = useState(null)
+  const [path, setPath] = useState(null)
+  const [modulePerms, setModulePerms] = useState(null)
+  
+  const handleNewMessage = (newMessage) => {
+    console.log('new message');
+    console.log(newMessage);
+    setModulePerms(newMessage.modulePerms)
+    setmodules(newMessage.modules)
+    setPath(newMessage.path)
+  };
+  useEffect(() => {  
+    observable.subscribe(handleNewMessage);
+    return () => {
+      observable.unsubscribe(handleNewMessage)
+    }
+  }, [handleNewMessage]);
   console.log('child 2',modules,modulePerms);
 
   return (
