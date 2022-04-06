@@ -43,14 +43,14 @@ export default function MainLayout() {
   }
 
   const handleRouteChange = (r) => {
-    observable.publish({modules , modulePerms,r});
+    observable.publish({modulePerms});
     setPath(r)
   }
   
 
   useEffect(() => {
     console.log('modules',modules , modulePerms);
-  observable.publish({modules , modulePerms , path});
+    observable.publish({modulePerms});
 
   }, [modules , modulePerms , path])
   

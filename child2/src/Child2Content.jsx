@@ -6,20 +6,16 @@ import Feature3_M2 from "./Feature3_M2";
 import Feature4_M2 from "./Feature4_M2";
 import IndexPage from "./IndexPage";
 import { Observable } from 'windowed-observable';
+import { useDispatch, useSelector } from 'react-redux'
+
 const observable = new Observable('messages');
 
 export default function Child2Content({ }) {
-
-  const [modules, setmodules] = useState(null)
-  const [path, setPath] = useState(null)
-  const [modulePerms, setModulePerms] = useState(null)
+ 
+  const dispatch = useDispatch()
   
-  const handleNewMessage = (newMessage) => {
-    console.log('new message');
-    console.log(newMessage);
-    setModulePerms(newMessage.modulePerms)
-    setmodules(newMessage.modules)
-    setPath(newMessage.path)
+  const handleNewMessage = (newMessage) => { 
+    dispatch({ type: 'CHANGE_PERMS', payload: newMessage.modulePerms});
   };
   useEffect(() => {  
     observable.subscribe(handleNewMessage);
@@ -27,14 +23,13 @@ export default function Child2Content({ }) {
       observable.unsubscribe(handleNewMessage)
     }
   }, [handleNewMessage]);
-  console.log('child 2',modules,modulePerms);
 
   return (
     <div style={{height:'100%',background:'aquamarine',padding:'50px'}} className='text-3xl'>
 <Router>
   
      <Switch>
-            <Route exact path={["/module2", "/"]} component={()=><IndexPage path={path} modules={modules} modulePerms={modulePerms}/>} />
+            <Route exact path={["/module2", "/"]} component={()=><IndexPage/>} />
             <Route exact path={["/module2/f1", "/f1"]} component={Feature1_M2} />
             <Route exact path={["/module2/f2", "/f2"]} component={Feature2_M2} />
             <Route exact path={["/module2/f3", "/f3"]} component={Feature3_M2} />

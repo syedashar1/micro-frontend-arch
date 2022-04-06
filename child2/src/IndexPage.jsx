@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch , Link } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux'
 
-export default function IndexPage({path,modules,modulePerms}) {
+export default function IndexPage({}) {
 
 
     const [pre, setPre] = useState('/')
-  
+    const modulePerms = useSelector((state) => state.userLogin.modulePerms);
+
     useEffect(() => {
-      setPre(path && path.length > 0 ? path : '' )
+      setPre(modulePerms && modulePerms.length > 0 ? '/module2' : '' )
     }, [ ])
 
   return (
