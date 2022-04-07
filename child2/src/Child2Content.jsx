@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch , Link } from "react-router-dom";
 import Feature1_M2 from "./Feature1_M2";
 import Feature2_M2 from "./Feature2_M2";
@@ -6,9 +6,9 @@ import Feature3_M2 from "./Feature3_M2";
 import Feature4_M2 from "./Feature4_M2";
 import IndexPage from "./IndexPage";
 import { Observable } from 'windowed-observable';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-const observable = new Observable('messages');
+const observable = new Observable('child2');
 
 export default function Child2Content({ }) {
  

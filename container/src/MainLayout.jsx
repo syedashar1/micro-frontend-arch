@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch , Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -6,7 +6,9 @@ import "remixicon/fonts/remixicon.css";
 import "./index.scss";
 import NotDeployed from './NotDeployed';
 import { Observable } from 'windowed-observable';
-const observable = new Observable('messages');
+const observable1 = new Observable('child1');
+const observable2 = new Observable('child2');
+const observable3 = new Observable('child3');
 let Child1Content ;
 let Child2Content ;
 let Child3Content ;
@@ -43,17 +45,13 @@ export default function MainLayout() {
   }
 
   const handleRouteChange = (r) => {
-    observable.publish({modulePerms});
+    
+    if(r=='/module1') observable1.publish({modulePerms : {m1_feature1 : modulePerms.m1_feature1 , m1_feature2 : modulePerms.m1_feature2 , m1_feature3 : modulePerms.m1_feature3 , m1_feature4 : modulePerms.m1_feature4} });
+    if(r=='/module2') observable2.publish({modulePerms : {m2_feature1 : modulePerms.m2_feature1 , m2_feature2 : modulePerms.m2_feature2 , m2_feature3 : modulePerms.m2_feature3 , m2_feature4 : modulePerms.m2_feature4} });
+    if(r=='/module3') observable3.publish({modulePerms : {m3_feature1 : modulePerms.m3_feature1 , m3_feature2 : modulePerms.m3_feature2 , m3_feature3 : modulePerms.m3_feature3 , m3_feature4 : modulePerms.m3_feature4} });
+
     setPath(r)
   }
-  
-
-  useEffect(() => {
-    console.log('modules',modules , modulePerms);
-    observable.publish({modulePerms});
-
-  }, [modules , modulePerms , path])
-  
 
 
   return (
@@ -76,14 +74,14 @@ export default function MainLayout() {
 
 <div className="grid grid-cols-4 gap-4">
   <div className="bg-blue-300" style={{height:'75vh'}} >
-    {(!modules || modules.includes('m1')) && <Link to='/module1' onClick={()=>handleRouteChange('/module1')} ><p className="text-3xl font-bold text-center">Module 1</p></Link>}
-    {(!modules || modules.includes('m2')) && <Link to='/module2' onClick={()=>handleRouteChange('/module2')} ><p className="text-3xl font-bold text-center">Module 2</p></Link>}
-    {(!modules || modules.includes('m3')) && <Link to='/module3' onClick={()=>handleRouteChange('/module3')} ><p className="text-3xl font-bold text-center">Module 3</p></Link>}
+    {(modules && modules.m1) && <Link to='/module1' onClick={()=>handleRouteChange('/module1')} ><p className="text-3xl font-bold text-center">Module 1</p></Link>}
+    {(modules && modules.m2) && <Link to='/module2' onClick={()=>handleRouteChange('/module2')} ><p className="text-3xl font-bold text-center">Module 2</p></Link>}
+    {(modules && modules.m3) && <Link to='/module3' onClick={()=>handleRouteChange('/module3')} ><p className="text-3xl font-bold text-center">Module 3</p></Link>}
   </div>
   <div className="col-span-3">
   <div className="text-3xl mx-auto max-w-6xl">
      <div className="my-10">
-          {modules && modules[0] ? <Switch>
+          {modules && modulePerms ? <Switch>
             <Route exact path="/" component={()=><div>Welcome</div>} />
             <Route exact path="/module1" component={()=><Child1Content/>} />
             <Route exact path="/module2" component={()=><Child2Content/>} />
