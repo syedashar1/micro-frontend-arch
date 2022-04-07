@@ -15,6 +15,7 @@ export default function Child2Content({ }) {
   const dispatch = useDispatch()
   
   const handleNewMessage = (newMessage) => { 
+    console.log(newMessage);
     dispatch({ type: 'CHANGE_PERMS', payload: newMessage.modulePerms});
   };
   useEffect(() => {  
