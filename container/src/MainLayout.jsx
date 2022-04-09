@@ -47,7 +47,9 @@ export default function MainLayout() {
   }
 
   useEffect(() => {
-    if (!modules) return ;
+    console.log(modules);
+    console.log(modulePerms);
+    if (!modules || !modulePerms ) return ;
     window.sessionStorage.setItem('modules',JSON.stringify(modules))
     window.sessionStorage.setItem('modulePerms',JSON.stringify(modulePerms))
   }, [modules,modulePerms])
@@ -100,19 +102,19 @@ export default function MainLayout() {
           {modules && modulePerms ? <Switch>
             <Route exact path="/" component={()=><div>Welcome</div>} />
 
-            <Route exact path="/module1" component={()=><Child1Content/>} />
-            <Route exact path="/module1/f1" component={()=><Feature1_M1/>} />
-            <Route exact path="/module1/f2" component={()=><Feature2_M1/>} />
-            <Route exact path="/module1/f3" component={()=><Feature3_M1/>} />
-            <Route exact path="/module1/f4" component={()=><Feature4_M1/>} />
+            {modules.m1 && <Route exact path="/module1" component={()=><Child1Content/>} />}
+            {modulePerms.m1_feature1 && <Route exact path="/module1/f1" component={()=><Feature1_M1/>} />}
+            {modulePerms.m1_feature2 && <Route exact path="/module1/f2" component={()=><Feature2_M1/>} />}
+            {modulePerms.m1_feature3 && <Route exact path="/module1/f3" component={()=><Feature3_M1/>} />}
+            {modulePerms.m1_feature4 && <Route exact path="/module1/f4" component={()=><Feature4_M1/>} />}
 
-            <Route exact path="/module2" component={()=><Child2Content/>} />
-            <Route exact path="/module2/f1" component={()=><Feature1_M2/>} />
-            <Route exact path="/module2/f2" component={()=><Feature2_M2/>} />
-            <Route exact path="/module2/f3" component={()=><Feature3_M2/>} />
-            <Route exact path="/module2/f4" component={()=><Feature4_M2/>} />
+            {modules.m2 && <Route exact path="/module2" component={()=><Child2Content/>} />}
+            {modulePerms.m2_feature1 && <Route exact path="/module2/f1" component={()=><Feature1_M2/>} />}
+            {modulePerms.m2_feature2 && <Route exact path="/module2/f2" component={()=><Feature2_M2/>} />}
+            {modulePerms.m2_feature3 && <Route exact path="/module2/f3" component={()=><Feature3_M2/>} />}
+            {modulePerms.m2_feature4 && <Route exact path="/module2/f4" component={()=><Feature4_M2/>} />}
 
-            <Route exact path="/module3" component={()=><Child3Content/>} />
+            {modules.m3 && <Route exact path="/module3" component={()=><Child3Content/>} />}
 
             <Route path='*' exact component={()=><div>Page Not Found</div>} />
 
