@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch , Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -9,12 +9,19 @@ import { Observable } from 'windowed-observable';
 const observable1 = new Observable('child1');
 const observable2 = new Observable('child2');
 const observable3 = new Observable('child3');
-let Child1Content ;
-let Child2Content ;
-let Child3Content ;
+
+let Child1Content , Child2Content , Child3Content , Feature1_M1 , Feature2_M1 , Feature3_M1 , Feature4_M1 ,Feature1_M2 , Feature2_M2 , Feature3_M2 , Feature4_M2 ;
 try { Child1Content = require('child1/Child1Content').default } catch (e) {Child1Content = NotDeployed}
 try { Child2Content = require('child2/Child2Content').default } catch (e) {Child2Content = NotDeployed}
 try { Child3Content = require('child3/Child3Content').default } catch (e) {Child3Content = NotDeployed}
+try { Feature1_M1 = require('child1/Feature1_M1').default } catch (e) {Feature1_M1 = NotDeployed}
+try { Feature1_M2 = require('child1/Feature2_M1').default } catch (e) {Feature2_M1 = NotDeployed}
+try { Feature3_M1 = require('child1/Feature3_M1').default } catch (e) {Feature3_M1 = NotDeployed}
+try { Feature4_M1 = require('child1/Feature4_M1').default } catch (e) {Feature4_M1 = NotDeployed}
+try { Feature1_M2 = require('child2/Feature1_M2').default } catch (e) {Feature1_M2 = NotDeployed}
+try { Feature2_M2 = require('child2/Feature2_M2').default } catch (e) {Feature2_M2 = NotDeployed}
+try { Feature3_M2 = require('child2/Feature3_M2').default } catch (e) {Feature3_M2 = NotDeployed}
+try { Feature4_M2 = require('child2/Feature4_M2').default } catch (e) {Feature4_M2 = NotDeployed}
 
 
 
@@ -30,12 +37,21 @@ export default function MainLayout() {
   const login = () => {
     dispatch({ type: 'USER_SIGNIN_REQUEST'});
     //wait
-    dispatch({ type: 'USER_SIGNIN_SUCCESS'});
+    dispatch({ type: 'USER_SIGNIN_SUCCESS'})
+
   }
 
   const logout = () => {
     dispatch({ type: 'USER_SIGNOUT'});
+    window.sessionStorage.clear();
   }
+
+  useEffect(() => {
+    if (!modules) return ;
+    window.sessionStorage.setItem('modules',JSON.stringify(modules))
+    window.sessionStorage.setItem('modulePerms',JSON.stringify(modulePerms))
+  }, [modules,modulePerms])
+  
 
   const changePerm = () => {
 
@@ -62,7 +78,7 @@ export default function MainLayout() {
         <div className="flex-grow flex">
           <Link to="/">Home</Link>
             <div className="mx-5">|</div>
-            <button className="btn" onClick={login} >Log In</button>
+            <button className="btn" onClick={login} ><Link to='/'>Log In</Link></button>
             <div className="mx-5">|</div>
             <button className="btn" onClick={logout} >Log Out</button>
         </div>
@@ -83,9 +99,23 @@ export default function MainLayout() {
      <div className="my-10">
           {modules && modulePerms ? <Switch>
             <Route exact path="/" component={()=><div>Welcome</div>} />
+
             <Route exact path="/module1" component={()=><Child1Content/>} />
+            <Route exact path="/module1/f1" component={()=><Feature1_M1/>} />
+            <Route exact path="/module1/f2" component={()=><Feature2_M1/>} />
+            <Route exact path="/module1/f3" component={()=><Feature3_M1/>} />
+            <Route exact path="/module1/f4" component={()=><Feature4_M1/>} />
+
             <Route exact path="/module2" component={()=><Child2Content/>} />
+            <Route exact path="/module2/f1" component={()=><Feature1_M2/>} />
+            <Route exact path="/module2/f2" component={()=><Feature2_M2/>} />
+            <Route exact path="/module2/f3" component={()=><Feature3_M2/>} />
+            <Route exact path="/module2/f4" component={()=><Feature4_M2/>} />
+
             <Route exact path="/module3" component={()=><Child3Content/>} />
+
+            <Route path='*' exact component={()=><div>Page Not Found</div>} />
+
           </Switch>
         :
         <p><h1>Please Log In First</h1></p>  
