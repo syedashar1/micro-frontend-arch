@@ -6,7 +6,12 @@ export default function Feature2_M2() {
 
   const modulePerms = useSelector((state) => state.userLogin.modulePerms);
 
-  return (
-    <div><Link to={modulePerms ? '/module2' : '/'}>Module 2</Link> / Feature 2</div>
-  )
+  if(!modulePerms || modulePerms.m2_feature2 ) { 
+    return (
+      <div><Link to={modulePerms ? '/module2' : '/'}>Module 2</Link> / Feature 2</div>
+    )
+  }
+  else {
+    return <div>Not Permitted</div>
+  }
 }

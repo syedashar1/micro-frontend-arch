@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch , Link } from "react-router-dom";
+import {  Route, Routes , Link , useParams , } from "react-router-dom";
 import Feature1_M1 from "./Feature1_M1";
 import Feature2_M1 from "./Feature2_M1";
 import Feature3_M1 from "./Feature3_M1";
@@ -10,15 +10,15 @@ import { useDispatch } from 'react-redux'
 
 const observable = new Observable('child1');
 
-export default function Child1Content({}) {
-
+export default function Child1Content({ }) {
+ 
   const dispatch = useDispatch()
-
-  const handleNewMessage = (newMessage) => {
+  const params = useParams();
+  
+  const handleNewMessage = (newMessage) => { 
     console.log(newMessage);
     dispatch({ type: 'CHANGE_PERMS', payload: newMessage.modulePerms});
   };
-
   useEffect(() => {  
     observable.subscribe(handleNewMessage);
     return () => {
@@ -26,20 +26,27 @@ export default function Child1Content({}) {
     }
   }, [handleNewMessage]);
 
+  if (params && params.feature == 'f1') return <Feature1_M1/>  
+  if (params && params.feature == 'f2') return <Feature2_M1/>  
+  if (params && params.feature == 'f3') return <Feature3_M1/>  
+  if (params && params.feature == 'f4') return <Feature4_M1/> 
+  if (params && params.feature == 'f5') return <div>Feature Not Found</div> 
 
   return (
-<div style={{height:'100%',background:'aquamarine',padding:'50px'}} className='text-3xl'>
-<Router>
+    <div style={{height:'100%',background:'aquamarine',padding:'50px'}} className='text-3xl'>
   
-  <Switch>
-         <Route exact path={["/module1", "/"]} component={()=><IndexPage/>} />
-         <Route exact path={["/module1/f1", "/f1"]} component={Feature1_M1} />
-         <Route exact path={["/module1/f2", "/f2"]} component={Feature2_M1} />
-         <Route exact path={["/module1/f3", "/f3"]} component={Feature3_M1} />
-         <Route exact path={["/module1/f4", "/f4"]} component={Feature4_M1} />
- </Switch>
+     <Routes>
+            <Route exact path="/">
+                <Route exact index element={<IndexPage/>} />
+                <Route exact path="f1" element={<Feature1_M1/>} />
+                <Route exact path="f2" element={<Feature2_M1/>} />
+                <Route exact path="f3" element={<Feature3_M1/>} />
+                <Route exact path="f4" element={<Feature4_M1/>} />
+                <Route exact path="*" element={ <div>Page Not Found</div> } />
+            </Route>
 
- </Router>
-</div>
+    </Routes>
+
+    </div>
   );
 }

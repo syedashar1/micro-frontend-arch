@@ -1,12 +1,14 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useLocation } from "react-router-dom";
 
 export default function NotDeployed() {
+  
+  const location = useLocation()
+  console.log(location);
 
-  const history =  useHistory()
    return (
     <div>
-        <p><b>{history && history.location.pathname.split('/')[1]}</b></p>
+        <p><b>{location && location.pathname.split('/')[1]}</b></p>
         <p> is Not Deployed. Please Contact Support.</p>
     </div>
   )

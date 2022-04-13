@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch , Link } from "react-router-dom";
+import { BrowserRouter , Route, Routes , Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 
 import "remixicon/fonts/remixicon.css";
@@ -14,15 +14,6 @@ let Child1Content , Child2Content , Child3Content , Feature1_M1 , Feature2_M1 , 
 try { Child1Content = require('child1/Child1Content').default } catch (e) {Child1Content = NotDeployed}
 try { Child2Content = require('child2/Child2Content').default } catch (e) {Child2Content = NotDeployed}
 try { Child3Content = require('child3/Child3Content').default } catch (e) {Child3Content = NotDeployed}
-try { Feature1_M1 = require('child1/Feature1_M1').default } catch (e) {Feature1_M1 = NotDeployed}
-try { Feature1_M2 = require('child1/Feature2_M1').default } catch (e) {Feature2_M1 = NotDeployed}
-try { Feature3_M1 = require('child1/Feature3_M1').default } catch (e) {Feature3_M1 = NotDeployed}
-try { Feature4_M1 = require('child1/Feature4_M1').default } catch (e) {Feature4_M1 = NotDeployed}
-try { Feature1_M2 = require('child2/Feature1_M2').default } catch (e) {Feature1_M2 = NotDeployed}
-try { Feature2_M2 = require('child2/Feature2_M2').default } catch (e) {Feature2_M2 = NotDeployed}
-try { Feature3_M2 = require('child2/Feature3_M2').default } catch (e) {Feature3_M2 = NotDeployed}
-try { Feature4_M2 = require('child2/Feature4_M2').default } catch (e) {Feature4_M2 = NotDeployed}
-
 
 
 export default function MainLayout() {
@@ -62,18 +53,24 @@ export default function MainLayout() {
     setPath('/')
   }
 
-  const handleRouteChange = (r) => {
+  const handleRouteChange = async (r) => {
     
     if(r=='/module1') observable1.publish({modulePerms : {m1_feature1 : modulePerms.m1_feature1 , m1_feature2 : modulePerms.m1_feature2 , m1_feature3 : modulePerms.m1_feature3 , m1_feature4 : modulePerms.m1_feature4} });
     if(r=='/module2') observable2.publish({modulePerms : {m2_feature1 : modulePerms.m2_feature1 , m2_feature2 : modulePerms.m2_feature2 , m2_feature3 : modulePerms.m2_feature3 , m2_feature4 : modulePerms.m2_feature4} });
     if(r=='/module3') observable3.publish({modulePerms : {m3_feature1 : modulePerms.m3_feature1 , m3_feature2 : modulePerms.m3_feature2 , m3_feature3 : modulePerms.m3_feature3 , m3_feature4 : modulePerms.m3_feature4} });
 
     setPath(r)
+
+    console.log('trying');
+    try { Child1Content = await require('child1/Child1Content').default } catch (e) {console.log(e)}
+    try { Child2Content = require('child2/Child2Content').default } catch (e) {console.log(e)}
+    try { Child3Content = require('child3/Child3Content').default } catch (e) {console.log(e)}
+
   }
 
 
   return (
-    <Router>
+    <BrowserRouter>
 
 <div className="p-5 bg-blue-500 text-white text-3xl font-bold">
       <div className="flex">
@@ -99,26 +96,20 @@ export default function MainLayout() {
   <div className="col-span-3">
   <div className="text-3xl mx-auto max-w-6xl">
      <div className="my-10">
-          {modules && modulePerms ? <Switch>
-            <Route exact path="/" component={()=><div>Welcome</div>} />
+          {modules && modulePerms ? 
+          <Routes>
+            <Route exact path="/" >
+                <Route exact index element={<div>Welcome</div>} />
+                <Route exact path="module1" element={<Child1Content/>}/>
+                <Route exact path="module1/:feature" element={<Child1Content/>}/>
 
-            {modules.m1 && <Route exact path="/module1" component={()=><Child1Content/>} />}
-            {modulePerms.m1_feature1 && <Route exact path="/module1/f1" component={()=><Feature1_M1/>} />}
-            {modulePerms.m1_feature2 && <Route exact path="/module1/f2" component={()=><Feature2_M1/>} />}
-            {modulePerms.m1_feature3 && <Route exact path="/module1/f3" component={()=><Feature3_M1/>} />}
-            {modulePerms.m1_feature4 && <Route exact path="/module1/f4" component={()=><Feature4_M1/>} />}
+                <Route exact path="module2" element={<Child2Content/>} />
+                <Route exact path="module2/:feature" element={<Child2Content/>} />
 
-            {modules.m2 && <Route exact path="/module2" component={()=><Child2Content/>} />}
-            {modulePerms.m2_feature1 && <Route exact path="/module2/f1" component={()=><Feature1_M2/>} />}
-            {modulePerms.m2_feature2 && <Route exact path="/module2/f2" component={()=><Feature2_M2/>} />}
-            {modulePerms.m2_feature3 && <Route exact path="/module2/f3" component={()=><Feature3_M2/>} />}
-            {modulePerms.m2_feature4 && <Route exact path="/module2/f4" component={()=><Feature4_M2/>} />}
-
-            {modules.m3 && <Route exact path="/module3" component={()=><Child3Content/>} />}
-
-            <Route path='*' exact component={()=><div>Page Not Found</div>} />
-
-          </Switch>
+                <Route exact path="module3" element={<Child3Content/>} />
+                <Route exact path="*" element={ <div>Page Not Found</div> } />
+            </Route>
+          </Routes>
         :
         <p><h1>Please Log In First</h1></p>  
         }
@@ -132,6 +123,6 @@ export default function MainLayout() {
     <div className="p-5 bg-blue-500 text-white text-3xl font-bold text-center">
         Footer
     </div>
-    </Router>
+    </BrowserRouter>
   );
 }

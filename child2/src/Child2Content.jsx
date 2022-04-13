@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch , Link } from "react-router-dom";
+import {  Route, Routes , Link , useParams , } from "react-router-dom";
 import Feature1_M2 from "./Feature1_M2";
 import Feature2_M2 from "./Feature2_M2";
 import Feature3_M2 from "./Feature3_M2";
@@ -13,6 +13,7 @@ const observable = new Observable('child2');
 export default function Child2Content({ }) {
  
   const dispatch = useDispatch()
+  const params = useParams();
   
   const handleNewMessage = (newMessage) => { 
     console.log(newMessage);
@@ -25,19 +26,27 @@ export default function Child2Content({ }) {
     }
   }, [handleNewMessage]);
 
+  if (params && params.feature == 'f1') return <Feature1_M2/>  
+  if (params && params.feature == 'f2') return <Feature2_M2/>  
+  if (params && params.feature == 'f3') return <Feature3_M2/>  
+  if (params && params.feature == 'f4') return <Feature4_M2/> 
+  if (params && params.feature == 'f5') return <div>Feature Not Found</div> 
+
   return (
     <div style={{height:'100%',background:'aquamarine',padding:'50px'}} className='text-3xl'>
-<Router>
   
-     <Switch>
-            <Route exact path={["/module2", "/"]} component={()=><IndexPage/>} />
-            <Route exact path={["/module2/f1", "/f1"]} component={Feature1_M2} />
-            <Route exact path={["/module2/f2", "/f2"]} component={Feature2_M2} />
-            <Route exact path={["/module2/f3", "/f3"]} component={Feature3_M2} />
-            <Route exact path={["/module2/f4", "/f4"]} component={Feature4_M2} />
-    </Switch>
+     <Routes>
+            <Route exact path="/">
+                <Route exact index element={<IndexPage/>} />
+                <Route exact path="f1" element={<Feature1_M2/>} />
+                <Route exact path="f2" element={<Feature2_M2/>} />
+                <Route exact path="f3" element={<Feature3_M2/>} />
+                <Route exact path="f4" element={<Feature4_M2/>} />
+                <Route exact path="*" element={ <div>Page Not Found</div> } />
+            </Route>
 
-    </Router>
+    </Routes>
+
     </div>
   );
 }

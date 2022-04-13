@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Switch , Link } from "react-router-dom";
-import { useSelector } from 'react-redux'
+import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function IndexPage({}) {
 
 
     const [pre, setPre] = useState('/')
     const modulePerms = useSelector((state) => state.userLogin.modulePerms);
+
+    const location = useLocation()
+    console.log(location);
 
     useEffect(() => {
       setPre(modulePerms ? '/module1' : '' )
