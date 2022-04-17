@@ -30,7 +30,7 @@ export default function Child1Content({ }) {
   if (params && params.feature == 'f2') return <Feature2_M1/>  
   if (params && params.feature == 'f3') return <Feature3_M1/>  
   if (params && params.feature == 'f4') return <Feature4_M1/> 
-  if (params && params.feature == 'f5') return <div>Feature Not Found</div> 
+  if (params && params.feature ) return <div>Feature: {params.feature} Not Found</div> 
 
   return (
     <div style={{height:'100%',background:'aquamarine',padding:'50px'}} className='text-3xl'>
