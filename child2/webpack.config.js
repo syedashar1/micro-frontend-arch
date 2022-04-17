@@ -1,5 +1,6 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const { MFLiveReloadPlugin } = require("@module-federation/fmr");
 
 const deps = require("./package.json").dependencies;
 module.exports = {
@@ -40,6 +41,13 @@ module.exports = {
   },
 
   plugins: [
+
+    new MFLiveReloadPlugin({
+      port: 3001, // the port your app runs on
+      container: "child2", // the name of your app, must be unique
+      standalone: false, // false uses chrome extention
+    }),
+
     new ModuleFederationPlugin({
       name: "child2",
       filename: "remoteEntry.js",
@@ -48,10 +56,6 @@ module.exports = {
       },
       exposes: {
         "./Child2Content": "./src/Child2Content.jsx",
-        "./Feature1_M2":"./src/Feature1_M2.jsx",
-        "./Feature2_M2":"./src/Feature2_M2.jsx",
-        "./Feature3_M2":"./src/Feature3_M2.jsx",
-        "./Feature4_M2":"./src/Feature4_M2.jsx"
       },
       shared: {
         ...deps,

@@ -34,8 +34,7 @@ export default function Child1Content({ }) {
 
   return (
     <div style={{height:'100%',background:'aquamarine',padding:'50px'}} className='text-3xl'>
-  
-     <Routes>
+          <Routes>
             <Route exact path="/">
                 <Route exact index element={<IndexPage/>} />
                 <Route exact path="f1" element={<Feature1_M1/>} />

@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.13.10",
+    "@module-federation/fmr": "0.0.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.8",

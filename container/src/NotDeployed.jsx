@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLocation } from "react-router-dom";
 
-export default function NotDeployed() {
+export default function NotDeployed({message}) {
   
   const location = useLocation()
   console.log(location);
@@ -9,7 +9,7 @@ export default function NotDeployed() {
    return (
     <div>
         <p><b>{location && location.pathname.split('/')[1]}</b></p>
-        <p> is Not Deployed. Please Contact Support.</p>
+        <p> is {message ? message : 'Not Deployed'} . Please Contact Support.</p>
     </div>
   )
 }

@@ -10,7 +10,7 @@ const observable1 = new Observable('child1');
 const observable2 = new Observable('child2');
 const observable3 = new Observable('child3');
 
-let Child1Content , Child2Content , Child3Content , Feature1_M1 , Feature2_M1 , Feature3_M1 , Feature4_M1 ,Feature1_M2 , Feature2_M2 , Feature3_M2 , Feature4_M2 ;
+let Child1Content , Child2Content , Child3Content;
 try { Child1Content = require('child1/Child1Content').default } catch (e) {Child1Content = NotDeployed}
 try { Child2Content = require('child2/Child2Content').default } catch (e) {Child2Content = NotDeployed}
 try { Child3Content = require('child3/Child3Content').default } catch (e) {Child3Content = NotDeployed}
@@ -38,9 +38,10 @@ export default function MainLayout() {
   }
 
   useEffect(() => {
-    console.log(modules);
-    console.log(modulePerms);
     if (!modules || !modulePerms ) return ;
+    if(!modules.m1) Child1Content = NotDeployed
+    if(!modules.m2) Child2Content = NotDeployed
+    if(!modules.m3) Child3Content = NotDeployed
     window.sessionStorage.setItem('modules',JSON.stringify(modules))
     window.sessionStorage.setItem('modulePerms',JSON.stringify(modulePerms))
   }, [modules,modulePerms])
@@ -100,13 +101,15 @@ export default function MainLayout() {
           <Routes>
             <Route exact path="/" >
                 <Route exact index element={<div>Welcome</div>} />
-                <Route exact path="module1" element={<Child1Content/>}/>
-                <Route exact path="module1/:feature" element={<Child1Content/>}/>
+                <Route exact path="module1" element={ modules.m1 ? <Child1Content/> : <NotDeployed message={'Not Permitted'}/> }/>
+                <Route exact path="module1/:feature" element={ modules.m1 ? <Child1Content/> : <NotDeployed message={'Not Permitted'}/> }/>
 
-                <Route exact path="module2" element={<Child2Content/>} />
-                <Route exact path="module2/:feature" element={<Child2Content/>} />
+                <Route exact path="module2" element={ modules.m2 ? <Child2Content/> : <NotDeployed message={'Not Permitted'}/> } />
+                <Route exact path="module2/:feature" element={ modules.m2 ? <Child2Content/> : <NotDeployed message={'Not Permitted'}/> } />
 
-                <Route exact path="module3" element={<Child3Content/>} />
+                <Route exact path="module3" element={ modules.m3 ? <Child3Content/> : <NotDeployed message={'Not Permitted'}/> } />
+                <Route exact path="module3/:feature" element={ modules.m3 ? <Child3Content/> : <NotDeployed message={'Not Permitted'}/> } />
+                
                 <Route exact path="*" element={ <div>Page Not Found</div> } />
             </Route>
           </Routes>
@@ -120,8 +123,9 @@ export default function MainLayout() {
 
 
 
-    <div className="p-5 bg-blue-500 text-white text-3xl font-bold text-center">
-        Footer
+    <div className="p-5 bg-blue-500 text-white  text-center">
+        <p className="text-3xl font-bold" >Footer</p>
+        <a target='_blank' href="https://github.com/syedashar1" >github.com/syedashar1</a>
     </div>
     </BrowserRouter>
   );
